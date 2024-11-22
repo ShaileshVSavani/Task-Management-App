@@ -1,113 +1,3 @@
-// import React, { useState, useEffect, useContext } from 'react';
-// import { AuthContext } from '../context/AuthContext';
-// import { getTasks, createTask } from '../services/api';
-// import { toast } from 'react-toastify';
-// import TaskModal from '../components/TaskModal';
-
-// const Dashboard = () => {
-//   const { user } = useContext(AuthContext);
-//   const [tasks, setTasks] = useState([]);
-//   const [showModal, setShowModal] = useState(false);
-//   const [newTask, setNewTask] = useState({
-//     title: '',
-//     description: '',
-//     priority: 'Low',
-//     dueDate: '',
-//   });
-
-//   useEffect(() => {
-//     fetchTasks();
-//   }, []);
-
-//   const fetchTasks = async () => {
-//     try {
-//       const { data } = await getTasks();
-//       setTasks(data);
-//     } catch (error) {
-//       toast.error('Failed to fetch tasks');
-//     }
-//   };
-
-//   const handleCreateTask = async () => {
-//     try {
-//       await createTask(newTask);
-//       toast.success('Task created successfully');
-//       setShowModal(false);
-//       fetchTasks();
-//     } catch (error) {
-//       toast.error('Failed to create task');
-//     }
-//   };
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setNewTask((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   return (
-//     <div>
-//       <h1>{user.role === 'admin' ? 'Admin Dashboard' : 'My Tasks'}</h1>
-//       <button onClick={() => setShowModal(true)}>Add Task</button>
-
-//       <ul>
-//         {tasks.map((task) => (
-//           <li key={task._id}>
-//             <h3>{task.title}</h3>
-//             <p>{task.description}</p>
-//             <p>Priority: {task.priority}</p>
-//             <p>Due Date: {new Date(task.dueDate).toLocaleDateString()}</p>
-//             <p>Status: {task.completed ? 'Completed' : 'In Progress'}</p>
-//           </li>
-//         ))}
-//       </ul>
-
-//       {showModal && (
-//         <TaskModal
-//           title="Create Task"
-//           onClose={() => setShowModal(false)}
-//           onSave={handleCreateTask}
-//         >
-//           <form>
-//             <input
-//               type="text"
-//               name="title"
-//               placeholder="Task Title"
-//               value={newTask.title}
-//               onChange={handleInputChange}
-//               required
-//             />
-//             <textarea
-//               name="description"
-//               placeholder="Task Description"
-//               value={newTask.description}
-//               onChange={handleInputChange}
-//               required
-//             />
-//             <select
-//               name="priority"
-//               value={newTask.priority}
-//               onChange={handleInputChange}
-//             >
-//               <option value="Low">Low</option>
-//               <option value="Medium">Medium</option>
-//               <option value="High">High</option>
-//             </select>
-//             <input
-//               type="date"
-//               name="dueDate"
-//               value={newTask.dueDate}
-//               onChange={handleInputChange}
-//               required
-//             />
-//           </form>
-//         </TaskModal>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
-
 
 
 import React, { useState, useEffect } from 'react';
@@ -115,20 +5,16 @@ import Pagination from '../components/Pagination';
 import { getTasks } from '../services/api';
 import { toast } from 'react-toastify';
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user = {} }) => { // Default value added
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState('');
   const [sort, setSort] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    
-
-
-    
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchTasks = async (page = 1, filter = '', sort = '') => {
     try {
-      const { data } = await getTasks({ page, filter, sort }); // Adjust the API call as needed
+      const { data } = await getTasks({ page, filter, sort });
       setTasks(data.tasks);
       setTotalPages(data.totalPages);
       setCurrentPage(data.currentPage);
@@ -137,51 +23,84 @@ const Dashboard = ({ user }) => {
     }
   };
 
-  // Fetch tasks on component mount or when dependencies change
   useEffect(() => {
     fetchTasks(currentPage, filter, sort);
   }, [currentPage, filter, sort]);
 
   return (
-    <div>
-      <h1>{user.role === 'admin' ? 'Admin Dashboard' : 'My Tasks'}</h1>
-      <div>
-        <label>Filter:</label>
-        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="">All</option>
-          <option value="completed">Completed</option>
-          <option value="in-progress">In Progress</option>
-        </select>
+    <div className="flex items-center justify-center  bg-gray-50">
+      <div className="w-full max-w-3xl px-6 py-8 bg-white shadow-lg rounded-lg">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          {user?.role === 'admin' ? 'Admin Dashboard' : 'My Tasks'}
+        </h1>
 
-        <label>Sort:</label>
-        <select value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="">None</option>
-          <option value="dueDate">Due Date</option>
-          <option value="priority">Priority</option>
-        </select>
+        {/* Filter and Sort Section */}
+        <div className="flex flex-col md:flex-row items-center justify-center space-x-4 mb-6">
+          <div>
+            <label className="text-gray-600 font-medium mr-2">Filter:</label>
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All</option>
+              <option value="completed">Completed</option>
+              <option value="in-progress">In Progress</option>
+            </select>
+          </div>
 
-        <button onClick={() => fetchTasks(1, filter, sort)}>Apply</button>
+          <div>
+            <label className="text-gray-600 font-medium mr-2">Sort:</label>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">None</option>
+              <option value="dueDate">Due Date</option>
+              <option value="priority">Priority</option>
+            </select>
+          </div>
+
+          <button
+            onClick={() => fetchTasks(1, filter, sort)}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
+            Apply
+          </button>
+        </div>
+
+        {/* Task List */}
+        <ul className="space-y-4">
+          {tasks.length > 0 ? (
+            tasks.map((task) => (
+              <li
+                key={task._id}
+                className="p-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition"
+              >
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {task.title}
+                </h3>
+                <p className="text-gray-600">Due Date: {task.dueDate}</p>
+                <p className={`text-sm font-medium ${task.completed ? 'text-green-500' : 'text-yellow-500'}`}>
+                  Status: {task.completed ? 'Completed' : 'In Progress'}
+                </p>
+              </li>
+            ))
+          ) : (
+            <p className="text-gray-600 text-center">No tasks available.</p>
+          )}
+        </ul>
+
+        {/* Pagination */}
+        <div className="mt-6">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
       </div>
-
-      <ul>
-        {tasks.length > 0 ? (
-          tasks.map((task) => (
-            <li key={task._id}>
-              <h3>{task.title}</h3>
-              <p>Due Date: {task.dueDate}</p>
-              <p>Status: {task.completed ? 'Completed' : 'In Progress'}</p>
-            </li>
-          ))
-        ) : (
-          <p>No tasks available.</p>
-        )}
-      </ul>
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => setCurrentPage(page)}
-      />
     </div>
   );
 };

@@ -1,38 +1,3 @@
-// import React, { useContext } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { AuthContext } from '../context/AuthContext';
-
-// const Navbar = () => {
-//   const { user, logout } = useContext(AuthContext);
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     logout();
-//     navigate('/login');
-//   };
-
-//   return (
-//     <nav>
-//       <h1>Task Manager</h1>
-//       <ul>
-//         {user ? (
-//           <>
-//             <li>{user.role === 'admin' ? 'Admin Dashboard' : 'My Tasks'}</li>
-//             <li onClick={handleLogout}>Logout</li>
-//           </>
-//         ) : (
-//           <>
-//             <li><Link to="/login">Login</Link></li>
-//             <li><Link to="/register">Register</Link></li>
-//           </>
-//         )}
-//       </ul>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
 
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';

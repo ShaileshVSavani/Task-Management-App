@@ -1,39 +1,30 @@
+
+
 import React from 'react';
 
 const TaskModal = ({ title, children, onClose, onSave }) => {
   return (
-    <div style={styles.modal}>
-      <div style={styles.modalContent}>
-        <h2>{title}</h2>
-        {children}
-        <button onClick={onSave}>Save</button>
-        <button onClick={onClose}>Cancel</button>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto p-6">
+        <h2 className="text-xl font-semibold mb-4">{title}</h2>
+        <div>{children}</div>
+        <div className="flex justify-end mt-6 space-x-4">
+          <button
+            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+            onClick={onSave}
+          >
+            Save
+          </button>
+          <button
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  modal: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1000,
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '10px',
-    width: '400px',
-    maxHeight: '90vh',
-    overflowY: 'auto',
-  },
 };
 
 export default TaskModal;
