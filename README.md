@@ -130,15 +130,7 @@ cd task-management-app
 
 ---
 
-### **Screenshots**
-1. **Login Page**
-   - User-friendly login form.
-2. **Dashboard**
-   - Clean UI for managing tasks.
-3. **Admin Dashboard**
-   - Additional tools for administrators.
 
----
 
 
 
